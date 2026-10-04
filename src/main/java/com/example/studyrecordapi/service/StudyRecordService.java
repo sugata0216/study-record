@@ -16,4 +16,8 @@ public class StudyRecordService {
     public List<StudyRecord> findAll() {
         return studyRecordRepository.findAll();
     }
+    public StudyRecord save(StudyRecord studyRecord) {
+        studyRecordRepository.insert(studyRecord);
+        return studyRecord;
+    }
 }

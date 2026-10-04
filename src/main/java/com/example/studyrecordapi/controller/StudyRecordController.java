@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,5 +21,15 @@ public class StudyRecordController {
     public ResponseEntity<List<StudyRecord>> findAllRecords() {
         List<StudyRecord> records = studyRecordService.findAll();
         return ResponseEntity.ok(records);
+    }
+    @PostMapping
+    public ResponseEntity<StudyRecord> saveRecord(
+            @RequestBody StudyRecord studyRecord,
+            UriComponentsBuilder uriBuilder) {
+        StudyRecord createdRecord = studyRecordService.save(studyRecord);
+        URI location = uriBuilder.path("/api/study-records/{id}")
+                .buildAndExpand(createdRecord.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdRecord);
     }
 }
