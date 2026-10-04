@@ -1,0 +1,19 @@
+package com.example.studyrecordapi.service;
+
+import com.example.studyrecordapi.dto.StudyRecord;
+import com.example.studyrecordapi.repository.StudyRecordRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class StudyRecordService {
+    private final StudyRecordRepository studyRecordRepository;
+
+    public StudyRecordService(StudyRecordRepository studyRecordRepository) {
+        this.studyRecordRepository = studyRecordRepository;
+    }
+    public List<StudyRecord> findAll() {
+        return studyRecordRepository.findAll();
+    }
+}
