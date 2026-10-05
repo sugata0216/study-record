@@ -22,6 +22,11 @@ public class StudyRecordController {
         List<StudyRecord> records = studyRecordService.findAll();
         return ResponseEntity.ok(records);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<StudyRecord> findByRecordById(@PathVariable long id) {
+        StudyRecord studyRecord = studyRecordService.findById(id);
+        return ResponseEntity.ok(studyRecord);
+    }
     @PostMapping
     public ResponseEntity<StudyRecord> saveRecord(
             @RequestBody StudyRecord studyRecord,

@@ -15,4 +15,6 @@ public interface StudyRecordMapper {
     @Insert("INSERT INTO study_records (study_date, subject, topic, minutes, memo) VALUES (#{studyDate}, #{subject}, #{topic}, #{minutes}, #{memo})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(StudyRecord studyRecord);
+    @Select("SELECT id, study_date, subject, topic, minutes, memo FROM study_records WHERE id = #{id}")
+    StudyRecord findById(long id);
 }

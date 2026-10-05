@@ -16,7 +16,11 @@ public class StudyRecordRepository {
     public List<StudyRecord> findAll() {
         return studyRecordMapper.findAll();
     }
+    public StudyRecord findById(long id) {
+        return studyRecordMapper.findById(id);
+    }
     public int insert(StudyRecord studyRecord) {
         return studyRecordMapper.insert(studyRecord);
     }
+
 }
