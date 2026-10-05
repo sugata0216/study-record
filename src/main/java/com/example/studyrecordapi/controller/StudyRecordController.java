@@ -37,4 +37,9 @@ public class StudyRecordController {
                 .toUri();
         return ResponseEntity.created(location).body(createdRecord);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecord(@PathVariable long id) {
+        studyRecordService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

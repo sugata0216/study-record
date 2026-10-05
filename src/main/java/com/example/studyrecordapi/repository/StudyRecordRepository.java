@@ -22,5 +22,7 @@ public class StudyRecordRepository {
     public int insert(StudyRecord studyRecord) {
         return studyRecordMapper.insert(studyRecord);
     }
-
+    public boolean delete(long id) {
+        return studyRecordMapper.delete(id) == 1;
+    }
 }
