@@ -5,6 +5,7 @@ import com.example.studyrecordapi.exception.StudyRecordArgumentNotValidException
 import com.example.studyrecordapi.exception.StudyRecordNotFoundException;
 import com.example.studyrecordapi.repository.StudyRecordRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,27 @@ public class StudyRecordService {
         }
         studyRecordRepository.insert(studyRecord);
         return studyRecord;
+    }
+    @Transactional
+    public StudyRecord update(StudyRecord studyRecord, long id) {
+        if (studyRecord.getStudyDate() == null) {
+            throw new StudyRecordArgumentNotValidException("studyDate is empty");
+        }
+        if (studyRecord.getSubject() == null || studyRecord.getSubject().isEmpty()) {
+            throw new StudyRecordArgumentNotValidException("subject is empty");
+        }
+        if (studyRecord.getTopic() == null || studyRecord.getTopic().isEmpty()) {
+            throw new StudyRecordArgumentNotValidException("topic is empty");
+        }
+        if (studyRecord.getMinutes() == null) {
+            throw new StudyRecordArgumentNotValidException("minutes is empty");
+        }
+        StudyRecord targetStudyRecord = studyRecordRepository.findById(id);
+        if (targetStudyRecord == null) {
+            throw new StudyRecordNotFoundException(id);
+        }
+        studyRecord.setId(id);
+        return studyRecordRepository.update(studyRecord);
     }
     public boolean delete(long id) {
         if (!studyRecordRepository.delete(id)) {

@@ -37,6 +37,12 @@ public class StudyRecordController {
                 .toUri();
         return ResponseEntity.created(location).body(createdRecord);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<StudyRecord> updateRecord(@PathVariable long id,
+                                                    @RequestBody StudyRecord studyRecord) {
+        StudyRecord updatedRecord = studyRecordService.update(studyRecord, id);
+        return ResponseEntity.ok(updatedRecord);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecord(@PathVariable long id) {
         studyRecordService.delete(id);

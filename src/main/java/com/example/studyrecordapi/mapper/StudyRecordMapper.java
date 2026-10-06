@@ -16,4 +16,6 @@ public interface StudyRecordMapper {
     StudyRecord findById(long id);
     @Delete("DELETE FROM study_records WHERE id = #{id}")
     int delete(long id);
+    @Update("UPDATE study_records SET study_date = #{studyDate}, subject = #{subject}, topic = #{topic}, minutes = #{minutes}, memo = #{memo} WHERE id = #{id}")
+    int update(StudyRecord studyRecord);
 }
