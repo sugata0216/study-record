@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StudyLog</title>
+    <style>
+        :root { --blue:#0a8cf0; --text:#222a44; --bg:#f8f8fb; }
+        * { box-sizing: border-box}
+        html { font-size: 14px }
+        body { margin: 0; font-family: "Noto Sans JP",sans-serif; background: var(--bg); color:var(--text);
+               min-height: 100vh; display: flex; flex-direction: column; }
+        /*ヘッダー*/
+        header {
+            position: sticky; top: 0; background: #fff; border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 2rem; font-weight: 700; }
+        .btn {
+            background: var(--blue); color: #fff; border: none; border-radius: 999px;
+            padding: 1rem 2rem; font-weight: 700; cursor: pointer; }
+        /*メイン*/
+        main { flex: 1; max-width: 1100px; width: 100%; margin: 2rem auto; padding: 0 2rem;
+               display: grid; grid-template-columns: 1fr 320px; gap: 2rem; }
+        .card { background: #fff; border: 1px solid #eee; border-radius: 1rem; padding: 2rem; }
+        .card h2 { margin-top: 0; font-size: 1rem; }
+        .record { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; align-items: center; }
+        .record button { margin-left: 1rem; }
+        .actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .btn-edit, .btn-delete {
+            border-radius: 999px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+        }
+        /*編集・青の枠線ボタン*/
+        .btn-edit {
+            background: #fff;
+            color: var(--blue);
+            border: 1px solid var(--blue);
+        }
+        .btn-edit:hover {
+            background: var(--blue);
+            color: #fff;
+        }
+        /*削除・赤の枠線ボタン*/
+        .btn-delete {
+            background: #fff;
+            color: #e5484b;
+            border: 1px solid #e5484b;
+        }
+        .btn-delete:hover {
+            background: #e5484b;
+            color: #fff;
+        }
+        input, textarea { width: 100%; margin-bottom: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 1rem; }
+        textarea {
+            /* 縦方向のみ拡大可能(横にはみ出さない) */
+            resize: vertical;
+            min-height: 6rem;
+            max-height: 21rem;
+        }
+        .btn-cancel {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fff;
+            color: #666;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-cancel:hover { background: #f3f4f6; }
+        /*フッター*/
+        footer { padding: 2rem 4rem; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 1rem; }
+        footer nav a {display: block; color: var(--blue); text-decoration: none; margin: 1rem 0; text-align: left; }
+        footer .copy { margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">StudyLog</div>
+        <button class="btn" onclick="document.getElementById('subject').focus()">記録を追加</button>
+    </header>
+    <main>
+        <section class="card">
+            <h2>学習記録一覧</h2>
+            <div id="list"></div>
+        </section>
+        <aside class="card">
+            <h2 id="formTitle">新規登録</h2>
+            <input id="studyDate" type="date">
+            <input id="subject" placeholder="科目(例:Java)">
+            <input id="topic" placeholder="学習内容(例:Spring Boot)">
+            <input id="minutes" type="number" placeholder="学習時間(分)">
+            <textarea id="memo" placeholder="メモ"></textarea>
+            <button id="submitBtn" class="btn" style="width:100%;border-radius: 1rem" onclick="createRecord()">登録する</button>
+            <button id="cancelBtn" class="btn-cancel" style="display: none" onclick="resetForm()">キャンセル</button>
+        </aside>
+    </main>
+    <footer>
+        <nav>
+            <a href="#">利用規約</a>
+            <a href="#">プライバシーポリシー</a>
+            <a href="#">お問い合わせ</a>
+        </nav>
+        <div class="copy">© StudyLog</div>
+    </footer>
+    <script src="index.js"></script>
+</body>
+</html>
