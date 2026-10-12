@@ -2,11 +2,13 @@ package com.example.studyrecordapi.controller;
 
 import com.example.studyrecordapi.dto.StudyRecord;
 import com.example.studyrecordapi.service.StudyRecordService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -47,5 +49,13 @@ public class StudyRecordController {
     public ResponseEntity<Void> deleteRecord(@PathVariable long id) {
         studyRecordService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<StudyRecord>> searchRecords(
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate studyDate) {
+        List<StudyRecord> records = studyRecordService.search(subject, studyDate);
+        return ResponseEntity.ok(records);
     }
 }

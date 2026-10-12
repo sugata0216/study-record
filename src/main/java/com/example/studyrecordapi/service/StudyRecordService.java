@@ -7,6 +7,7 @@ import com.example.studyrecordapi.repository.StudyRecordRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -68,5 +69,9 @@ public class StudyRecordService {
             throw new StudyRecordNotFoundException(id);
         }
         return true;
+    }
+    public List<StudyRecord> search(String subject, LocalDate studyDate) {
+        String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
+        return studyRecordRepository.search(normalizedSubject, studyDate);
     }
 }
