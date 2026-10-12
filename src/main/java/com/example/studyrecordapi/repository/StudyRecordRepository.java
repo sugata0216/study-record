@@ -1,6 +1,7 @@
 package com.example.studyrecordapi.repository;
 
 import com.example.studyrecordapi.dto.StudyRecord;
+import com.example.studyrecordapi.exception.StudyRecordNotFoundException;
 import com.example.studyrecordapi.mapper.StudyRecordMapper;
 import org.springframework.stereotype.Repository;
 
@@ -22,5 +23,13 @@ public class StudyRecordRepository {
     public int insert(StudyRecord studyRecord) {
         return studyRecordMapper.insert(studyRecord);
     }
-
+    public StudyRecord update(StudyRecord studyRecord) {
+        if (studyRecordMapper.update(studyRecord) == 0) {
+            throw new StudyRecordNotFoundException(studyRecord.getId());
+        }
+        return studyRecord;
+    }
+    public boolean delete(long id) {
+        return studyRecordMapper.delete(id) == 1;
+    }
 }

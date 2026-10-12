@@ -1,10 +1,7 @@
 package com.example.studyrecordapi.mapper;
 
 import com.example.studyrecordapi.dto.StudyRecord;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -17,4 +14,8 @@ public interface StudyRecordMapper {
     int insert(StudyRecord studyRecord);
     @Select("SELECT id, study_date, subject, topic, minutes, memo FROM study_records WHERE id = #{id}")
     StudyRecord findById(long id);
+    @Delete("DELETE FROM study_records WHERE id = #{id}")
+    int delete(long id);
+    @Update("UPDATE study_records SET study_date = #{studyDate}, subject = #{subject}, topic = #{topic}, minutes = #{minutes}, memo = #{memo} WHERE id = #{id}")
+    int update(StudyRecord studyRecord);
 }
