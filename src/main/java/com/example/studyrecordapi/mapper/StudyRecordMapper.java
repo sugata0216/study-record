@@ -35,4 +35,9 @@ public interface StudyRecordMapper {
         </script>
     """)
     List<StudyRecord> search(@Param("subject") String subject, @Param("studyDate") LocalDate studyDate);
+    @Select("""
+        SELECT COALESCE(SUM(minutes), 0)
+        FROM study_records
+    """)
+    long sumTotalMinutes();
 }

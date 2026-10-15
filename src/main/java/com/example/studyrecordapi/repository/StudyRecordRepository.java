@@ -36,4 +36,7 @@ public class StudyRecordRepository {
     public List<StudyRecord> search(String subject, LocalDate studyDate) {
         return studyRecordMapper.search(subject, studyDate);
     }
+    public long sumTotalMinutes() {
+        return studyRecordMapper.sumTotalMinutes();
+    }
 }

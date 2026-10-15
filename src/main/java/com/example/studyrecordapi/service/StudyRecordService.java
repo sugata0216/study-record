@@ -4,8 +4,10 @@ import com.example.studyrecordapi.dto.StudyRecord;
 import com.example.studyrecordapi.exception.StudyRecordArgumentNotValidException;
 import com.example.studyrecordapi.exception.StudyRecordNotFoundException;
 import com.example.studyrecordapi.repository.StudyRecordRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,5 +75,8 @@ public class StudyRecordService {
     public List<StudyRecord> search(String subject, LocalDate studyDate) {
         String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
         return studyRecordRepository.search(normalizedSubject, studyDate);
+    }
+    public long findTotalStudyMinutes() {
+        return studyRecordRepository.sumTotalMinutes();
     }
 }
