@@ -5,6 +5,7 @@ import com.example.studyrecordapi.exception.StudyRecordNotFoundException;
 import com.example.studyrecordapi.mapper.StudyRecordMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -31,5 +32,8 @@ public class StudyRecordRepository {
     }
     public boolean delete(long id) {
         return studyRecordMapper.delete(id) == 1;
+    }
+    public List<StudyRecord> search(String subject, LocalDate studyDate) {
+        return studyRecordMapper.search(subject, studyDate);
     }
 }
