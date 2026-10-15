@@ -32,12 +32,28 @@ public interface StudyRecordMapper {
                 </if>
             </where>
             ORDER BY study_date DESC, id DESC
+            LIMIT #{limit} OFFSET #{offset}
         </script>
     """)
-    List<StudyRecord> search(@Param("subject") String subject, @Param("studyDate") LocalDate studyDate);
+    List<StudyRecord> search(String subject, LocalDate studyDate, int limit, long offset);
     @Select("""
         SELECT COALESCE(SUM(minutes), 0)
         FROM study_records
     """)
     long sumTotalMinutes();
+    @Select("""
+        <script>
+            SELECT COUNT(*)
+            FROM study_records
+            <where>
+                 <if test='subject != null and subject != ""'>
+                    AND LOWER(subject) LIKE LOWER(CONCAT('%', #{subject}, '%'))
+                 </if>
+                 <if test='studyDate != null'>
+                    AND study_date = #{studyDate}
+                </if>
+            </where>
+        </script>
+    """)
+    long count(String subject, LocalDate studyDate);
 }

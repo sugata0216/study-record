@@ -1,11 +1,14 @@
 package com.example.studyrecordapi.controller;
 
 import com.example.studyrecordapi.dto.StudyRecord;
+import com.example.studyrecordapi.dto.StudyRecordPageResponse;
 import com.example.studyrecordapi.dto.StudyTimeSummary;
 import com.example.studyrecordapi.service.StudyRecordService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -21,9 +24,11 @@ public class StudyRecordController {
         this.studyRecordService = studyRecordService;
     }
     @GetMapping
-    public ResponseEntity<List<StudyRecord>> findAllRecords() {
-        List<StudyRecord> records = studyRecordService.findAll();
-        return ResponseEntity.ok(records);
+    public ResponseEntity<StudyRecordPageResponse> findAllRecords(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        validatePagination(page, size);
+        return ResponseEntity.ok(studyRecordService.findAll(page, size));
     }
     @GetMapping("/{id}")
     public ResponseEntity<StudyRecord> findByRecordById(@PathVariable long id) {
@@ -52,16 +57,24 @@ public class StudyRecordController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/search")
-    public ResponseEntity<List<StudyRecord>> searchRecords(
+    public ResponseEntity<StudyRecordPageResponse> searchRecords(
             @RequestParam(required = false) String subject,
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate studyDate) {
-        List<StudyRecord> records = studyRecordService.search(subject, studyDate);
-        return ResponseEntity.ok(records);
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate studyDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        validatePagination(page, size);
+        return ResponseEntity.ok(studyRecordService.search(subject, studyDate, page, size));
     }
     @GetMapping("/total-minutes")
     public ResponseEntity<StudyTimeSummary> findTotalStudyMinutes() {
         StudyTimeSummary summary = new StudyTimeSummary(studyRecordService.findTotalStudyMinutes());
         return ResponseEntity.ok(summary);
+    }
+    private void validatePagination(int page, int size) {
+        if (page < 0 || size < 1 || size > 100) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "ページは0以上、sizeは1から100の範囲で指定してください");
+        }
     }
 }

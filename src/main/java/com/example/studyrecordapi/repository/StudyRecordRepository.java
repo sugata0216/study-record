@@ -33,10 +33,13 @@ public class StudyRecordRepository {
     public boolean delete(long id) {
         return studyRecordMapper.delete(id) == 1;
     }
-    public List<StudyRecord> search(String subject, LocalDate studyDate) {
-        return studyRecordMapper.search(subject, studyDate);
+    public List<StudyRecord> search(String subject, LocalDate studyDate, int limit, long offset) {
+        return studyRecordMapper.search(subject, studyDate, limit, offset);
     }
     public long sumTotalMinutes() {
         return studyRecordMapper.sumTotalMinutes();
+    }
+    public long count(String subject, LocalDate studyDate) {
+        return studyRecordMapper.count(subject, studyDate);
     }
 }
