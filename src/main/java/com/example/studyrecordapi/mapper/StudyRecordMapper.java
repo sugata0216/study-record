@@ -37,10 +37,20 @@ public interface StudyRecordMapper {
     """)
     List<StudyRecord> search(String subject, LocalDate studyDate, int limit, long offset);
     @Select("""
-        SELECT COALESCE(SUM(minutes), 0)
-        FROM study_records
+        <script>
+            SELECT COALESCE(SUM(minutes), 0)
+            FROM study_records
+            <where>
+                 <if test='subject != null and subject != ""'>
+                    AND LOWER(subject) LIKE LOWER(CONCAT('%', #{subject}, '%'))
+                 </if>
+                 <if test='studyDate != null'>
+                    AND study_date = #{studyDate}
+                 </if>
+            </where>
+        </script>
     """)
-    long sumTotalMinutes();
+    long sumTotalMinutes(String subject, LocalDate studyDate);
     @Select("""
         <script>
             SELECT COUNT(*)

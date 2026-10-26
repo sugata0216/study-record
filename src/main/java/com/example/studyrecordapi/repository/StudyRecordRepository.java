@@ -36,8 +36,8 @@ public class StudyRecordRepository {
     public List<StudyRecord> search(String subject, LocalDate studyDate, int limit, long offset) {
         return studyRecordMapper.search(subject, studyDate, limit, offset);
     }
-    public long sumTotalMinutes() {
-        return studyRecordMapper.sumTotalMinutes();
+    public long sumTotalMinutes(String subject, LocalDate studyDate) {
+        return studyRecordMapper.sumTotalMinutes(subject, studyDate);
     }
     public long count(String subject, LocalDate studyDate) {
         return studyRecordMapper.count(subject, studyDate);

@@ -77,10 +77,14 @@ public class StudyRecordService {
         String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
         return createPage(normalizedSubject, studyDate, page, size);
     }
-    public long findTotalStudyMinutes() {
-        return studyRecordRepository.sumTotalMinutes();
+    public long findTotalStudyMinutes(String subject, LocalDate studyDate) {
+        String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
+        return studyRecordRepository.sumTotalMinutes(normalizedSubject, studyDate);
     }
     private StudyRecordPageResponse createPage(String subject, LocalDate studyDate, int page, int size) {
+        if (page < 0 || size <= 0) {
+            throw new StudyRecordArgumentNotValidException("page or size is invalid");
+        }
         long offset = (long) page * size;
         List<StudyRecord> records = studyRecordRepository.search(subject, studyDate, size, offset);
         long totalElements = studyRecordRepository.count(subject, studyDate);
