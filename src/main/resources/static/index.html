@@ -103,7 +103,7 @@
             gap: 1rem;
             margin-top: 1rem;
         }
-        .btn-cancel-modal, btn-confirm-delete {
+        .btn-cancel-modal, .btn-confirm-delete {
             padding: 1rem;
             border-radius: 1rem;
             font-weight: 700;
@@ -121,17 +121,93 @@
             border: 1px solid #e5484d;
         }
         .btn-confirm-delete:hover { background: #cf3a3f; }
+        .pager {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .btn-page {
+            padding: 1rem;
+            background: #fff;
+            color: var(--blue);
+            border: 1px solid var(--blue);
+            border-radius: 999px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-page:hover:not(:disabled) { background: var(--blue); color: #fff; }
+        .btn-page:disabled { color: #aaa; border-color: #ddd; cursor: not-allowed; }
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .search-bar input {
+            width: auto;
+            flex: 1 1 10rem;
+            margin-bottom: 0;
+        }
+        .btn-search, .btn-clear {
+            padding: 1rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-search {
+            background: var(--blue);
+            color: #fff;
+            border: 1px solid var(--blue);
+        }
+        .btn-clear {
+            background: #fff;
+            color: #666;
+            border: 1px solid #ccc;
+        }
+        .btn-clear:hover {
+            background: #f3f4f6;
+        }
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eef7ff;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+        .total-box strong {
+            font-size: 1rem;
+            color: var(--blue);
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">StudyLog</div>
-        <button class="btn" onclick="document.getElementById('subject').focus()">記録を追加</button>
     </header>
     <main>
         <section class="card">
             <h2>学習記録一覧</h2>
+            <div class="search-bar">
+                <input id="searchSubject" placeholder="科目で検索(例:Java)">
+                <input id="searchDate" type="date">
+                <button class="btn-search" onclick="searchRecords()">検索</button>
+                <button class="btn-clear" onclick="clearSearch()">クリア</button>
+            </div>
+            <div class="total-box">
+                <span id="totalLabel">合計学習時間</span>
+                <strong id="totalValue">-</strong>
+            </div>
             <div id="list"></div>
+            <div class="pager">
+                <button id="prevBtn" class="btn-page" onclick="changePage(-1)">← 前へ</button>
+                <span id="pageInfo"></span>
+                <button id="nextBtn" class="btn-page" onclick="changePage(1)">次へ →</button>
+            </div>
         </section>
         <aside class="card">
             <h2 id="formTitle">新規登録</h2>
@@ -145,11 +221,6 @@
         </aside>
     </main>
     <footer>
-        <nav>
-            <a href="#">利用規約</a>
-            <a href="#">プライバシーポリシー</a>
-            <a href="#">お問い合わせ</a>
-        </nav>
         <div class="copy">© StudyLog</div>
     </footer>
     <div id="modal" class="modal-overlay" style="display:none" onclick="closeDeleteModal()">

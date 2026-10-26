@@ -1,11 +1,14 @@
 package com.example.studyrecordapi.service;
 
 import com.example.studyrecordapi.dto.StudyRecord;
+import com.example.studyrecordapi.dto.StudyRecordPageResponse;
 import com.example.studyrecordapi.exception.StudyRecordArgumentNotValidException;
 import com.example.studyrecordapi.exception.StudyRecordNotFoundException;
 import com.example.studyrecordapi.repository.StudyRecordRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,8 +20,8 @@ public class StudyRecordService {
     public StudyRecordService(StudyRecordRepository studyRecordRepository) {
         this.studyRecordRepository = studyRecordRepository;
     }
-    public List<StudyRecord> findAll() {
-        return studyRecordRepository.findAll();
+    public StudyRecordPageResponse findAll(int page, int size) {
+        return createPage(null, null, page, size);
     }
     public StudyRecord findById(long id) {
         StudyRecord record = studyRecordRepository.findById(id);
@@ -70,8 +73,22 @@ public class StudyRecordService {
         }
         return true;
     }
-    public List<StudyRecord> search(String subject, LocalDate studyDate) {
+    public StudyRecordPageResponse search(String subject, LocalDate studyDate, int page, int size) {
         String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
-        return studyRecordRepository.search(normalizedSubject, studyDate);
+        return createPage(normalizedSubject, studyDate, page, size);
+    }
+    public long findTotalStudyMinutes(String subject, LocalDate studyDate) {
+        String normalizedSubject = (subject == null || subject.isBlank()) ? null : subject.trim();
+        return studyRecordRepository.sumTotalMinutes(normalizedSubject, studyDate);
+    }
+    private StudyRecordPageResponse createPage(String subject, LocalDate studyDate, int page, int size) {
+        if (page < 0 || size <= 0) {
+            throw new StudyRecordArgumentNotValidException("page or size is invalid");
+        }
+        long offset = (long) page * size;
+        List<StudyRecord> records = studyRecordRepository.search(subject, studyDate, size, offset);
+        long totalElements = studyRecordRepository.count(subject, studyDate);
+        long totalPages = totalElements / size + (totalElements % size == 0 ? 0 : 1);
+        return new StudyRecordPageResponse(records, page, size, totalElements, totalPages);
     }
 }
